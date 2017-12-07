@@ -9,15 +9,8 @@ using TripCalculator.Models;
 namespace TripCalculator.Test
 {
     [TestFixture]
-    class ModelTests
+    public class ModelTests
     {
-        [SetUp]
-        public void SetUpModelTests()
-        {
-
-        }
-
-
         [Test]
         public void TripCanInitialize()
         {
