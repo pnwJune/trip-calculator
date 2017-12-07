@@ -8,7 +8,7 @@ namespace TripCalculator.Models
 {
     public class Trip
     {
-        public List<Traveler> Travelers { get; set; }
+        public List<Traveler> Travelers { get; private set; }
 
         public Trip()
         {
@@ -20,6 +20,13 @@ namespace TripCalculator.Models
             Travelers.Add(new Traveler(name));
         }
 
-        
+        public bool DeleteTraveler(string name)
+        {
+            var match = Travelers.Find(t => t.Name == name);
+            if(match != null)
+                Travelers.Remove(match);
+
+            return match != null;
+        }
     }
 }
