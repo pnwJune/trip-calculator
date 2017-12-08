@@ -8,11 +8,20 @@ namespace TripCalculator.Models
 {
     public class Trip
     {
+        public const string DefaultTripName = "My New Trip";
+
         public List<Traveler> Travelers { get; private set; }
+        public string Name { get; set; }
 
         public Trip()
         {
             Travelers = new List<Traveler>();
+            Name = DefaultTripName;
+        }
+
+        public Trip(string name) : this()
+        {
+            Name = name;
         }
 
         public void AddTraveler(string name)
