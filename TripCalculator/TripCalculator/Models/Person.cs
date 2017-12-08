@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace TripCalculator.Models
 {
@@ -6,21 +8,21 @@ namespace TripCalculator.Models
     {
         public string Name { get; set; }
 
-        public List<double> Expenses { get; set; }
+        public ObservableCollection<double> Expenses { get; set; }
 
         public double Total
         {
             get
             {
                 double sum = 0;
-                Expenses.ForEach(e => sum += e);
+                Expenses.ToList().ForEach(e => sum += e);
                 return sum;
             }
         }
 
         public Traveler(string name)
         {
-            Expenses = new List<double>();
+            Expenses = new ObservableCollection<double>();
             Name = name;
         }
     }
