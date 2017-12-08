@@ -1,14 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 
 namespace TripCalculator.Models
 {
-    public class Traveler
+    public class Traveler : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyname)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
+        }
+
         public string Name { get; set; }
 
-        public ObservableCollection<double> Expenses { get; set; }
+        public ObservableCollection<double> Expenses { get; private set; }
 
         public double Total
         {
