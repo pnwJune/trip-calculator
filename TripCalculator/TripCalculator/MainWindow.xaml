@@ -14,7 +14,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <TextBlock FontSize="18" Margin="10" TextWrapping="Wrap" Grid.Row="0" VerticalAlignment="Center">Welcome to Trip Calculator! Please select from the following:</TextBlock>
-        <Button VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0, 10, 75, 10" Grid.Row="1" Width="200" Command="{Binding StartNewTripCommand}">Start New Trip</Button>
-        <Button VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0, 10, 75, 10" Grid.Row="2" Width="200" Command="{Binding LoadExistingTripCommand}">Load Existing Trip</Button>
+        <Button VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Width="200" Command="{Binding StartNewTripCommand}">Start New Trip</Button>
+        <Button VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2" Width="200" Command="{Binding LoadExistingTripCommand}">Load Existing Trip</Button>
     </Grid>
 </Window>
