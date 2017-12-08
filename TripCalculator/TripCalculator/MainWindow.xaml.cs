@@ -12,17 +12,27 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TripCalculator.ViewModels;
 
 namespace TripCalculator
 {
     /// <summary>
+    /// A simple contract interface used to bind the main window with Unity
+    /// </summary>
+    public interface IMainWindow
+    {
+
+    }
+
+    /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IMainWindow
     {
-        public MainWindow()
+        public MainWindow(IMainViewModel viewModel)
         {
             InitializeComponent();
+            DataContext = viewModel;
         }
     }
 }
