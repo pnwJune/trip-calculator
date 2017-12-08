@@ -20,6 +20,13 @@ namespace TripCalculator.Test
         }
 
         [Test]
+        public void TripCanName()
+        {
+            var trip = new Trip("hello world");
+            Assert.AreEqual("hello world", trip.Name);
+        }
+
+        [Test]
         public void TripCanAddTraveler()
         {
             var trip = new Trip();
