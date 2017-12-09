@@ -72,28 +72,12 @@ namespace TripCalculator.Test
         [Test]
         public void TripCanCalculateAverageOfAllExpenses()
         {
-            var trip = new Trip();
-            trip.AddTraveler("foo");
-            trip.AddTraveler("bar");
-            trip.AddTraveler("baz");
+            var trip = GenerateBasicTrip();
             
-            // $5.75, $35.00, and $12.79
-            trip.AddExpense("foo", 5.75);
-            trip.AddExpense("foo", 35);
-            trip.AddExpense("foo", 12.79);
             Assert.AreEqual(53.54, trip.GetTraveler("foo").Total);
 
-            // $12.00, $15.00, and $23.23
-            trip.AddExpense("bar", 12.00);
-            trip.AddExpense("bar", 15);
-            trip.AddExpense("bar", 23.23);
             Assert.AreEqual(50.23, trip.GetIthTraveler(1).Total);
-
-            // $10.00, $20.00, $38.41, and $45.00
-            trip.AddExpense("baz", 10);
-            trip.AddExpense("baz", 20);
-            trip.AddExpense("baz", 38.41);
-            trip.AddExpense("baz", 45);
+            
             Assert.AreEqual(113.41, trip.GetTraveler("baz").Total);
 
             Assert.AreEqual(217.18, trip.GetTotalExpenses());
@@ -103,29 +87,8 @@ namespace TripCalculator.Test
         [Test]
         public void TravelerCanGetReimbursementsForOneMaxPayer()
         {
+            var trip = GenerateBasicTrip();
 
-            var trip = new Trip();
-            trip.AddTraveler("foo");
-            trip.AddTraveler("bar");
-            trip.AddTraveler("baz");
-
-            // $5.75, $35.00, and $12.79
-            trip.AddExpense("foo", 5.75);
-            trip.AddExpense("foo", 35);
-            trip.AddExpense("foo", 12.79);
-
-            // $12.00, $15.00, and $23.23
-            trip.AddExpense("bar", 12.00);
-            trip.AddExpense("bar", 15);
-            trip.AddExpense("bar", 23.23);
-
-            // $10.00, $20.00, $38.41, and $45.00
-            trip.AddExpense("baz", 10);
-            trip.AddExpense("baz", 20);
-            trip.AddExpense("baz", 38.41);
-            trip.AddExpense("baz", 45);
-
-            double[] offsets = new double[] { 18.85, 22.16, 0};
             var map = trip.GetMapTravelersToReimbursements();
 
             Assert.AreEqual(2, map.Count);
@@ -142,7 +105,61 @@ namespace TripCalculator.Test
             Assert.AreEqual("baz", fooReimbursements[0].Payee.Name);
             Assert.AreEqual(22.16, barReimbursements[0].Value);
             Assert.AreEqual("baz", barReimbursements[0].Payee.Name);
+        }
 
+        [Test]
+        public void TravelerCanGetReimbursementsForMultipleMaxPayer()
+        {
+            var trip = GenerateBasicTrip();
+            trip.AddTraveler("qux");
+            trip.AddExpense("qux", 113.41);
+            var map = trip.GetMapTravelersToReimbursements();
+
+            Assert.AreEqual(2, map.Count);
+            Assert.IsTrue(map.ContainsKey(trip.GetTraveler("foo")));
+            Assert.IsTrue(map.ContainsKey(trip.GetTraveler("bar")));
+            Assert.IsFalse(map.ContainsKey(trip.GetIthTraveler(2)));
+
+            var fooReimbursements = map[trip.GetTraveler("foo")];
+            var barReimbursements = map[trip.GetTraveler("bar")];
+
+            Assert.IsTrue(fooReimbursements.Count == 2);
+            Assert.IsTrue(barReimbursements.Count == 2);
+            
+            Assert.AreEqual(14.55, fooReimbursements[0].Value);
+            Assert.AreEqual(14.55, fooReimbursements[1].Value);
+            Assert.AreEqual("baz", fooReimbursements[0].Payee.Name);
+            Assert.AreEqual("qux", fooReimbursements[1].Payee.Name);
+            Assert.AreEqual(16.21, barReimbursements[0].Value);
+            Assert.AreEqual(16.21, barReimbursements[1].Value);
+            Assert.AreEqual("baz", barReimbursements[0].Payee.Name);
+            Assert.AreEqual("qux", barReimbursements[1].Payee.Name);
+        }
+
+        private Trip GenerateBasicTrip()
+        {
+            var trip = new Trip();
+            trip.AddTraveler("foo");
+            trip.AddTraveler("bar");
+            trip.AddTraveler("baz");
+
+            // $5.75, $35.00, and $12.79
+            trip.AddExpense("foo", 5.75);
+            trip.AddExpense("foo", 35);
+            trip.AddExpense("foo", 12.79);
+
+            // $12.00, $15.00, and $23.23
+            trip.AddExpense("bar", 12.00);
+            trip.AddExpense("bar", 15);
+            trip.AddExpense("bar", 23.23);
+
+            // $10.00, $20.00, $38.41, and $45.00
+            trip.AddExpense("baz", 10);
+            trip.AddExpense("baz", 20);
+            trip.AddExpense("baz", 38.41);
+            trip.AddExpense("baz", 45);
+
+            return trip;
         }
     }
 }
