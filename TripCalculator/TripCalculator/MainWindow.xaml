@@ -74,11 +74,26 @@
                             Margin="10">
                     <ComboBox ItemsSource="{Binding CurrentTrip.Travelers}" DisplayMemberPath="Name" 
                               SelectedValue="{Binding TravelerToAddExpense}" SelectedValuePath="Name" Width="75"/>
-                    <TextBox FontSize="14" Text="{Binding ExpenseValueToAdd}" Margin="10,0,10,0" Width="150"/>
-                    <Button Command="{Binding AddExpenseCommand}" >
-                        <TextBlock Margin="2">Add Expense</TextBlock>
-                    </Button>
+                    <TextBox FontSize="14" Text="{Binding ExpenseValueToAdd}" Margin="10,0,10,0" Width="140"/>
+                    <Button Command="{Binding AddExpenseCommand}" Content="Add Expense"  />
                 </StackPanel>
+                <Button Grid.Row="3" Grid.Column="1" Margin="10" Command="{Binding ModifyTabViewIndexCommand}"
+                        HorizontalAlignment="Right" CommandParameter="incr" Content="View Final Breakdown"/>
+
+            </Grid>
+        </TabItem>
+        <TabItem Header="Final Trip Breakdown">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" FontSize="22" Text="Final Reimbursement Breakdown:" 
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <ListBox Grid.Row="1" Margin="10" ItemsSource="{Binding OutputPaymentsList}" FontSize="14" />
+                <Button Grid.Row="2" Margin="10" HorizontalAlignment="Left" Command="{Binding ModifyTabViewIndexCommand}"
+                        CommandParameter="decr" >Return To Overview</Button>
             </Grid>
         </TabItem>
     </TabControl>

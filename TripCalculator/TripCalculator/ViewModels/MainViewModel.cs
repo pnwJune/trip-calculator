@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -79,6 +80,8 @@ namespace TripCalculator.ViewModels
             }
         }
 
+        public ObservableCollection<string> OutputPaymentsList { get; set; }
+
         private int _CurrentTabViewIndex;
         public int CurrentTabViewIndex
         {
@@ -136,6 +139,8 @@ namespace TripCalculator.ViewModels
 
         public MainViewModel()
         {
+            OutputPaymentsList = new ObservableCollection<string>();
+
             _loadExistingTripCommand = new Command(DoLoadExistingTripCommand, 
                 VerifyParameterIsValidPath);
             _startNewTripCommand = new Command(DoStartNewTripCommand, 
@@ -144,6 +149,7 @@ namespace TripCalculator.ViewModels
                 VerifyParameterIsValidModifierAndCanModifyTabViewIndex);
             _AddExpenseCommand = new Command(DoAddExpenseCommand,
                 VerifyExpenseToAddIsValidDouble);
+
             CurrentTabViewIndex = (int)TabViews.ModeSelect;
         }
 
@@ -202,6 +208,26 @@ namespace TripCalculator.ViewModels
             }
             NotifyPropertyChanged("Title");
             ModifyTabViewIndexCommand.RaiseCanExecuteChanged();
+
+            if (CurrentTabViewIndex == (int)TabViews.OutputView)
+                GenerateOutputStrings();
+        }
+
+        private void GenerateOutputStrings()
+        {
+            var mapping = CurrentTrip.GetMapTravelersToReimbursements();
+
+            foreach(var kvp in mapping)
+            {
+                var traveler = kvp.Key;
+                var payments = kvp.Value;
+
+                foreach(var payment in payments)
+                {
+                    var resultString = $"{traveler.Name} owes {payment.Payee.Name} ${payment.Value}";
+                    OutputPaymentsList.Add(resultString);
+                }
+            }
         }
 
         private void DoLoadExistingTripCommand(object obj)
