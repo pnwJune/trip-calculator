@@ -71,7 +71,7 @@ namespace TripCalculator.Models
             var traveler = Travelers.ToList().Find(t => t.Name == travelerName);
             if(traveler != null)
             {
-                traveler.Expenses.Add(expenseValue);
+                traveler.AddExpense(expenseValue);
 
                 if (traveler.Total > MaximumPaid)
                     _maximumPayers.Clear();

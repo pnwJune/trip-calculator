@@ -15,11 +15,15 @@ namespace TripCalculator.ViewModels
     {
         Command StartNewTripCommand { get; }
         Command LoadExistingTripCommand { get; }
-
+        Command ModifyTabViewIndexCommand { get; }
+        Command AddExpenseCommand { get; }
     }
 
     class MainViewModel : IMainViewModel, INotifyPropertyChanged
     {
+        public const string IncrementStringCode = "incr";
+        public const string DecrementStringCode = "decr";
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyname)
         {
@@ -30,7 +34,49 @@ namespace TripCalculator.ViewModels
         {
             ModeSelect,
             InitializeNewTripView,
-            TripView
+            TripView,
+            OutputView
+        }
+
+        public string Title
+        {
+            get
+            {
+                var title = $"Trip Calculator";
+                if (CurrentTrip != null)
+                    title += $" - {CurrentTrip.Name}";
+
+                return title;
+            }
+        }
+
+        private string _expenseValueToAdd;
+        public string ExpenseValueToAdd
+        {
+            get
+            {
+                return _expenseValueToAdd;
+            }
+            set
+            {
+                _expenseValueToAdd = value;
+                NotifyPropertyChanged("ExpenseValueToAdd");
+                AddExpenseCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        private string _travelerToAddExpense;
+        public string TravelerToAddExpense
+        {
+            get
+            {
+                return _travelerToAddExpense;
+            }
+            set
+            {
+                _travelerToAddExpense = value;
+                NotifyPropertyChanged("TravelerToAddExpense");
+            }
         }
 
         private int _CurrentTabViewIndex;
@@ -73,23 +119,89 @@ namespace TripCalculator.ViewModels
         private Command _startNewTripCommand;
         public Command StartNewTripCommand
         {
-            get
-            {
-                return _startNewTripCommand;
-            }
+            get { return _startNewTripCommand; }
+        }
+
+        private Command _modifyTabViewIndexCommand;
+        public Command ModifyTabViewIndexCommand
+        {
+            get { return _modifyTabViewIndexCommand; }
+        }
+
+        private Command _AddExpenseCommand;
+        public Command AddExpenseCommand
+        {
+            get { return _AddExpenseCommand; }
         }
 
         public MainViewModel()
         {
-            _loadExistingTripCommand = new Command(DoLoadExistingTripCommand, VerifyParameterIsValidPath);
-            _startNewTripCommand = new Command(DoStartNewTripCommand, new Func<object, bool>((obj) => { return true; }));
+            _loadExistingTripCommand = new Command(DoLoadExistingTripCommand, 
+                VerifyParameterIsValidPath);
+            _startNewTripCommand = new Command(DoStartNewTripCommand, 
+                new Func<object, bool>((obj) => { return true; }));
+            _modifyTabViewIndexCommand = new Command(DoModifyTabViewIndex, 
+                VerifyParameterIsValidModifierAndCanModifyTabViewIndex);
+            _AddExpenseCommand = new Command(DoAddExpenseCommand,
+                VerifyExpenseToAddIsValidDouble);
             CurrentTabViewIndex = (int)TabViews.ModeSelect;
+        }
+
+        private bool VerifyExpenseToAddIsValidDouble(object arg)
+        {
+            double value = 0.0;
+            if(Double.TryParse(ExpenseValueToAdd, out value) == false || 
+                value <= 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private void DoAddExpenseCommand(object obj)
+        {
+            CurrentTrip.AddExpense(TravelerToAddExpense, 
+                double.Parse(ExpenseValueToAdd));
+        }
+
+        private bool VerifyParameterIsValidModifierAndCanModifyTabViewIndex(object arg)
+        {
+            if (CurrentTabViewIndex < (int)TabViews.InitializeNewTripView || 
+                CurrentTabViewIndex > (int)TabViews.OutputView)
+                return false;
+
+            if ((arg.ToString() == IncrementStringCode ||
+                arg.ToString() == DecrementStringCode) == false)
+                return false;
+
+            bool incr = arg.ToString() == IncrementStringCode;
+
+            return incr ? CurrentTabViewIndex >= (int)TabViews.InitializeNewTripView :
+                CurrentTabViewIndex <= (int)TabViews.OutputView;
         }
 
         private void DoStartNewTripCommand(object obj)
         {
             CurrentTrip = new Trip();
             CurrentTabViewIndex = (int)TabViews.InitializeNewTripView;
+            NotifyPropertyChanged("Title");
+            ModifyTabViewIndexCommand.RaiseCanExecuteChanged();
+        }
+
+        private void DoModifyTabViewIndex(object obj)
+        {
+            switch(obj.ToString())
+            {
+                case IncrementStringCode:
+                    CurrentTabViewIndex++;
+                    break;
+                case
+                    DecrementStringCode:
+                    CurrentTabViewIndex--;
+                    break;
+            }
+            NotifyPropertyChanged("Title");
+            ModifyTabViewIndexCommand.RaiseCanExecuteChanged();
         }
 
         private void DoLoadExistingTripCommand(object obj)

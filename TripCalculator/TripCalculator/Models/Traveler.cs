@@ -42,5 +42,12 @@ namespace TripCalculator.Models
         {
             Name = name;
         }
+
+        internal void AddExpense(double expenseValue)
+        {
+            Expenses.Add(expenseValue);
+            NotifyPropertyChanged("Expenses");
+            NotifyPropertyChanged("Total");
+        }
     }
 }
