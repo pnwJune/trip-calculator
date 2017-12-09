@@ -8,6 +8,7 @@ namespace TripCalculator.Models
 {
     public class Traveler : INotifyPropertyChanged
     {
+        public const string DefaultTravelerName = "<New Name>";
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyname)
         {
@@ -31,9 +32,14 @@ namespace TripCalculator.Models
             }
         }
 
-        public Traveler(string name)
+        public Traveler()
         {
             Expenses = new ObservableCollection<double>();
+            Name = Traveler.DefaultTravelerName;
+        }
+
+        public Traveler(string name) : this()
+        {
             Name = name;
         }
     }

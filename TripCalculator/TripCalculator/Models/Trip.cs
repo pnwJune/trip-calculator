@@ -39,7 +39,7 @@ namespace TripCalculator.Models
 
         public Trip()
         {
-            Travelers = new ObservableCollection<Traveler>() { new Traveler("<Your Name Here>")};
+            Travelers = new ObservableCollection<Traveler>();
             Name = DefaultTripName;
             MaximumPaid = 0;
             _maximumPayers = new List<Traveler>();
