@@ -215,6 +215,7 @@ namespace TripCalculator.ViewModels
 
         private void GenerateOutputStrings()
         {
+            OutputPaymentsList.Clear();
             var mapping = CurrentTrip.GetMapTravelersToReimbursements();
 
             foreach(var kvp in mapping)
@@ -224,7 +225,7 @@ namespace TripCalculator.ViewModels
 
                 foreach(var payment in payments)
                 {
-                    var resultString = $"{traveler.Name} owes {payment.Payee.Name} ${payment.Value}";
+                    var resultString = $"{traveler.Name} owes {payment.Payee.Name} ${String.Format("{0:0.00}", payment.Value)}";
                     OutputPaymentsList.Add(resultString);
                 }
             }
