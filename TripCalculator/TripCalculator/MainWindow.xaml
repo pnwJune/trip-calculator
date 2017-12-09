@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:TripCalculator"
         mc:Ignorable="d"
         Title="Trip Calculator" Height="350" Width="525">
-    <Grid>
+    <TabControl SelectedIndex="{Binding CurrentTabViewIndex}"  >
+        <TabItem Visibility="Collapsed" Header="Mode Select">
+            <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
@@ -15,6 +17,32 @@
         </Grid.RowDefinitions>
         <TextBlock FontSize="18" Margin="10" TextWrapping="Wrap" Grid.Row="0" VerticalAlignment="Center">Welcome to Trip Calculator! Please select from the following:</TextBlock>
         <Button VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Width="200" Command="{Binding StartNewTripCommand}">Start New Trip</Button>
-        <Button VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2" Width="200" Command="{Binding LoadExistingTripCommand}">Load Existing Trip</Button>
+        <Button VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2" Width="200" Command="{Binding LoadExistingTripCommand}" IsEnabled="False">Load Existing Trip (t.b.d)</Button>
     </Grid>
+        </TabItem>
+        <TabItem Visibility="Visible" Header="Initialize New Trip">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="10" FontSize="22">Trip Name:</TextBlock>
+                <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" 
+                         Margin="10" Text="{Binding CurrentTrip.Name}" />
+                <TextBlock Grid.Row="1" Grid.Column="0"  Margin="10" FontSize="22">Travelers:</TextBlock>
+                <DataGrid Grid.Row="1" Grid.Column="1" ItemsSource="{Binding CurrentTrip.Travelers}" 
+                          Margin="10" AutoGenerateColumns="False" CanUserAddRows="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </TabItem>
+        <TabItem Visibility="Visible" Header="Trip"></TabItem>
+    </TabControl>
 </Window>

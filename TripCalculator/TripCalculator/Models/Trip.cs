@@ -18,7 +18,7 @@ namespace TripCalculator.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
         }
 
-        public ObservableCollection<Traveler> Travelers { get; private set; }
+        public ObservableCollection<Traveler> Travelers { get; set; }
 
         private string _name;
         public string Name
@@ -39,7 +39,7 @@ namespace TripCalculator.Models
 
         public Trip()
         {
-            Travelers = new ObservableCollection<Traveler>();
+            Travelers = new ObservableCollection<Traveler>() { new Traveler("<Your Name Here>")};
             Name = DefaultTripName;
             MaximumPaid = 0;
             _maximumPayers = new List<Traveler>();

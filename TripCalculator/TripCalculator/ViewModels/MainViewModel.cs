@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,8 +18,49 @@ namespace TripCalculator.ViewModels
 
     }
 
-    class MainViewModel : IMainViewModel
+    class MainViewModel : IMainViewModel, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyname)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
+        }
+
+        enum TabViews
+        {
+            ModeSelect,
+            InitializeNewTripView,
+            TripView
+        }
+
+        private int _CurrentTabViewIndex;
+        public int CurrentTabViewIndex
+        {
+            get
+            {
+                return _CurrentTabViewIndex;
+            }
+            set
+            {
+                _CurrentTabViewIndex = value;
+                NotifyPropertyChanged("CurrentTabViewIndex");
+            }
+        }
+
+        private Trip _currentTrip;
+        public Trip CurrentTrip
+        {
+            get
+            {
+                return _currentTrip;
+            }
+            set
+            {
+                _currentTrip = value;
+                NotifyPropertyChanged("CurrentTrip");
+            }
+        }
+
         private Command _loadExistingTripCommand;
         public Command LoadExistingTripCommand
         {
@@ -41,11 +83,13 @@ namespace TripCalculator.ViewModels
         {
             _loadExistingTripCommand = new Command(DoLoadExistingTripCommand, VerifyParameterIsValidPath);
             _startNewTripCommand = new Command(DoStartNewTripCommand, new Func<object, bool>((obj) => { return true; }));
+            CurrentTabViewIndex = (int)TabViews.ModeSelect;
         }
 
         private void DoStartNewTripCommand(object obj)
         {
-            throw new NotImplementedException();
+            CurrentTrip = new Trip();
+            CurrentTabViewIndex = (int)TabViews.InitializeNewTripView;
         }
 
         private void DoLoadExistingTripCommand(object obj)
@@ -55,7 +99,7 @@ namespace TripCalculator.ViewModels
 
         private bool VerifyParameterIsValidPath(object arg)
         {
-            throw new NotImplementedException();
+            return true;
         }
     }
 
