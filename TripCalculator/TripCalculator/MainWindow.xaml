@@ -37,10 +37,11 @@
                 <TextBlock Grid.Row="1" Grid.Column="0"  Margin="10" FontSize="22">Travelers:</TextBlock>
                 <DataGrid Grid.Row="1" Grid.Column="1" ItemsSource="{Binding CurrentTrip.Travelers}" 
                           Margin="10" AutoGenerateColumns="False" CanUserAddRows="True" >
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                    <DataGrid.Columns >
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
                     </DataGrid.Columns>
                 </DataGrid>
+                <Button Grid.Row="2" Grid.Column="1" Width="100" Margin="10" HorizontalAlignment="Right">Continue</Button>
             </Grid>
         </TabItem>
         <TabItem Visibility="Visible" Header="Trip"></TabItem>
