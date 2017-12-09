@@ -81,24 +81,27 @@ namespace TripCalculator.Test
             trip.AddExpense("foo", 5.75);
             trip.AddExpense("foo", 35);
             trip.AddExpense("foo", 12.79);
+            Assert.AreEqual(53.54, trip.GetTraveler("foo").Total);
 
             // $12.00, $15.00, and $23.23
             trip.AddExpense("bar", 12.00);
             trip.AddExpense("bar", 15);
             trip.AddExpense("bar", 23.23);
+            Assert.AreEqual(50.23, trip.GetIthTraveler(1).Total);
 
             // $10.00, $20.00, $38.41, and $45.00
             trip.AddExpense("baz", 10);
             trip.AddExpense("baz", 20);
             trip.AddExpense("baz", 38.41);
             trip.AddExpense("baz", 45);
+            Assert.AreEqual(113.41, trip.GetTraveler("baz").Total);
 
             Assert.AreEqual(217.18, trip.GetTotalExpenses());
             Assert.AreEqual(72.39, Math.Round(trip.GetIndividualEqualShare(), 2));
         }
 
         [Test]
-        public void TravelerCanGetDifferenceFromAverage()
+        public void TravelerCanGetReimbursementsForOneMaxPayer()
         {
 
             var trip = new Trip();
@@ -124,6 +127,22 @@ namespace TripCalculator.Test
 
             double[] offsets = new double[] { 18.85, 22.16, 0};
             var map = trip.GetMapTravelersToReimbursements();
+
+            Assert.AreEqual(2, map.Count);
+            Assert.IsTrue(map.ContainsKey(trip.GetTraveler("foo")));
+            Assert.IsTrue(map.ContainsKey(trip.GetTraveler("bar")));
+            Assert.IsFalse(map.ContainsKey(trip.GetIthTraveler(2)));
+
+            var fooReimbursements = map[trip.GetTraveler("foo")];
+            var barReimbursements = map[trip.GetTraveler("bar")];
+
+            Assert.IsTrue(fooReimbursements.Count == 1);
+            Assert.IsTrue(barReimbursements.Count == 1);
+            Assert.AreEqual(18.85, fooReimbursements[0].Value);
+            Assert.AreEqual("baz", fooReimbursements[0].Payee.Name);
+            Assert.AreEqual(22.16, barReimbursements[0].Value);
+            Assert.AreEqual("baz", barReimbursements[0].Payee.Name);
+
         }
     }
 }

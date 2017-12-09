@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -17,13 +18,16 @@ namespace TripCalculator.Models
 
         public ObservableCollection<double> Expenses { get; private set; }
 
+        /// <summary>
+        /// Always returns to 2 decimal places
+        /// </summary>
         public double Total
         {
             get
             {
                 double sum = 0;
                 Expenses.ToList().ForEach(e => sum += e);
-                return sum;
+                return Math.Round(sum, 2);
             }
         }
 

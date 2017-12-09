@@ -34,10 +34,15 @@ namespace TripCalculator.Models
             }
         }
 
+        public double MaximumPaid { get; private set; }
+        private List<Traveler> _maximumPayers;
+
         public Trip()
         {
             Travelers = new ObservableCollection<Traveler>();
             Name = DefaultTripName;
+            MaximumPaid = 0;
+            _maximumPayers = new List<Traveler>();
         }
 
         public Trip(string name) : this()
@@ -67,6 +72,15 @@ namespace TripCalculator.Models
             if(traveler != null)
             {
                 traveler.Expenses.Add(expenseValue);
+
+                if (traveler.Total > MaximumPaid)
+                    _maximumPayers.Clear();
+                if(traveler.Total >= MaximumPaid)
+                {
+                    MaximumPaid = traveler.Total;
+                    _maximumPayers.Add(traveler);
+                }
+
                 return true;
             }
             return false;
@@ -95,14 +109,34 @@ namespace TripCalculator.Models
                 GetTotalExpenses() / Travelers.Count : 0;
         }
 
-        public Dictionary<Traveler, Reimbursement> GetMapTravelersToReimbursements()
+        public Dictionary<Traveler, List<Reimbursement>> GetMapTravelersToReimbursements()
         {
-            var result = new Dictionary<Traveler, Reimbursement>();
-            var average = GetIndividualEqualShare();
-            foreach(var traveler in Travelers)
+            var result = new Dictionary<Traveler, List<Reimbursement>>();
+
+            // return no reimbursements if no expenses have been logged
+            if (_maximumPayers.Count > 0)
             {
-                var difference = average - traveler.Total;
+                var average = GetIndividualEqualShare();
+
+                // only iterate over travelers that are not in the maximumPayers list
+                var remainingTravelers = Travelers.Where(t => 
+                _maximumPayers.Any(p => p.Name == t.Name) == false);
+                foreach (var traveler in remainingTravelers)
+                {
+                    // round this value to two decimals since reimbursement is paid as cash
+                    var reimburseCost = Math.Round((average - traveler.Total) / _maximumPayers.Count, 2);
+                    result.Add(traveler, new List<Reimbursement>());
+                    for (int i = 0; i < _maximumPayers.Count; i++)
+                    {
+                        result[traveler].Add(new Reimbursement()
+                        {
+                            Payee = _maximumPayers[i], Value = reimburseCost
+                        });
+                    }
+                }
             }
+
+            return result;
         }
     }
 }
