@@ -58,5 +58,51 @@ namespace TripCalculator.Models
 
             return match != null;
         }
+
+        public bool AddExpense(string travelerName, double expenseValue)
+        {
+            if (expenseValue <= 0)
+                return false;
+            var traveler = Travelers.ToList().Find(t => t.Name == travelerName);
+            if(traveler != null)
+            {
+                traveler.Expenses.Add(expenseValue);
+                return true;
+            }
+            return false;
+        }
+
+        public Traveler GetTraveler(string name)
+        {
+            return Travelers.ToList().Find(t => t.Name == name);
+        }
+
+        public Traveler GetIthTraveler(int index)
+        {
+            return index >= 0 ? Travelers.ElementAt(index) : null;
+        }
+
+        public double GetTotalExpenses()
+        {
+            double sum = 0;
+            Travelers.ToList().ForEach(t => sum += t.Total);
+            return sum;
+        }
+
+        public double GetIndividualEqualShare()
+        {
+            return Travelers.Count > 0 ?
+                GetTotalExpenses() / Travelers.Count : 0;
+        }
+
+        public Dictionary<Traveler, Reimbursement> GetMapTravelersToReimbursements()
+        {
+            var result = new Dictionary<Traveler, Reimbursement>();
+            var average = GetIndividualEqualShare();
+            foreach(var traveler in Travelers)
+            {
+                var difference = average - traveler.Total;
+            }
+        }
     }
 }
