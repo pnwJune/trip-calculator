@@ -20,7 +20,7 @@ namespace TripCalculator.ViewModels
         Command AddExpenseCommand { get; }
     }
 
-    class MainViewModel : IMainViewModel, INotifyPropertyChanged
+    public class MainViewModel : IMainViewModel, INotifyPropertyChanged
     {
         public const string IncrementStringCode = "incr";
         public const string DecrementStringCode = "decr";
@@ -31,7 +31,7 @@ namespace TripCalculator.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
         }
 
-        enum TabViews
+        public enum TabViews
         {
             ModeSelect,
             InitializeNewTripView,
@@ -156,7 +156,8 @@ namespace TripCalculator.ViewModels
         private bool VerifyExpenseToAddIsValidDouble(object arg)
         {
             double value = 0.0;
-            if(Double.TryParse(ExpenseValueToAdd, out value) == false || 
+            if(string.IsNullOrEmpty(TravelerToAddExpense) ||
+                Double.TryParse(ExpenseValueToAdd, out value) == false || 
                 value <= 0)
             {
                 return false;
@@ -182,8 +183,10 @@ namespace TripCalculator.ViewModels
 
             bool incr = arg.ToString() == IncrementStringCode;
 
-            return incr ? CurrentTabViewIndex >= (int)TabViews.InitializeNewTripView :
-                CurrentTabViewIndex <= (int)TabViews.OutputView;
+            return incr ? CurrentTabViewIndex >= (int)TabViews.InitializeNewTripView &&
+                CurrentTabViewIndex < (int) TabViews.OutputView :
+                CurrentTabViewIndex <= (int)TabViews.OutputView && 
+                CurrentTabViewIndex > (int)TabViews.InitializeNewTripView;
         }
 
         private void DoStartNewTripCommand(object obj)
@@ -216,6 +219,10 @@ namespace TripCalculator.ViewModels
         private void GenerateOutputStrings()
         {
             OutputPaymentsList.Clear();
+
+            if (_currentTrip == null)
+                return;
+
             var mapping = CurrentTrip.GetMapTravelersToReimbursements();
 
             foreach(var kvp in mapping)
