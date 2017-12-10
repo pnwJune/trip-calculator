@@ -11,6 +11,9 @@ namespace TripCalculator.Test
     [TestFixture]
     public class ModelTests
     {
+        /// <summary>
+        /// Tests a trip can be initialized correctly
+        /// </summary>
         [Test]
         public void TripCanInitialize()
         {
@@ -19,6 +22,9 @@ namespace TripCalculator.Test
             Assert.IsEmpty(trip.Travelers);
         }
 
+        /// <summary>
+        /// Tests the trip can have different names
+        /// </summary>
         [Test]
         public void TripCanName()
         {
@@ -26,6 +32,9 @@ namespace TripCalculator.Test
             Assert.AreEqual("hello world", trip.Name);
         }
 
+        /// <summary>
+        /// Tests the Trip can add a traveler with correct initial values
+        /// </summary>
         [Test]
         public void TripCanAddTraveler()
         {
@@ -37,6 +46,9 @@ namespace TripCalculator.Test
             Assert.AreEqual(0, trip.Travelers.First().Total);
         }
 
+        /// <summary>
+        /// Tests the Trip can add and then delete a traveler if its there
+        /// </summary>
         [Test]
         public void TripCanDeleteTraveler()
         {
@@ -44,8 +56,13 @@ namespace TripCalculator.Test
             trip.AddTraveler("Deleted");
             Assert.IsTrue(trip.DeleteTraveler("Deleted"));
             Assert.IsEmpty(trip.Travelers);
+
+            Assert.IsFalse(trip.DeleteTraveler("not there"));
         }
 
+        /// <summary>
+        /// Tests the Trip can add expenses correctly
+        /// </summary>
         [Test]
         public void TripCanAddExpensesToTraveler()
         {
@@ -54,8 +71,13 @@ namespace TripCalculator.Test
             Assert.IsTrue(trip.AddExpense("foo", 12.34));
             Assert.IsFalse(trip.AddExpense("foo", 0.00));
             Assert.IsFalse(trip.AddExpense("foo", -0.09));
+            Assert.AreEqual(12.34, trip.GetIthTraveler(0).Total);
         }
         
+        /// <summary>
+        /// Tests that the trip correctly gets travelers correctly,
+        /// either by string name or by int index
+        /// </summary>
         [Test]
         public void TripCanGetTraveler()
         {
@@ -69,10 +91,20 @@ namespace TripCalculator.Test
 
         }
 
+        /// <summary>
+        /// Tests that the Trip can get the correct average contribution
+        /// using the values from the specification
+        /// </summary>
         [Test]
         public void TripCanCalculateAverageOfAllExpenses()
         {
-            var trip = GenerateBasicTrip();
+            // do the empty case first
+            var trip = new Trip();
+            Assert.AreEqual(0, trip.GetIndividualEqualShare());
+            Assert.AreEqual(0, trip.GetTotalExpenses());
+
+            // use the example from the specification
+            trip = GenerateBasicTrip();
             
             Assert.AreEqual(53.54, trip.GetTraveler("foo").Total);
 
@@ -84,6 +116,11 @@ namespace TripCalculator.Test
             Assert.AreEqual(72.39, Math.Round(trip.GetIndividualEqualShare(), 2));
         }
 
+        /// <summary>
+        /// Tests that the Trip can calculate reimbursements when
+        /// one person has paid more than the others, using the same 
+        /// values from the specification
+        /// </summary>
         [Test]
         public void TravelerCanGetReimbursementsForOneMaxPayer()
         {
@@ -107,14 +144,21 @@ namespace TripCalculator.Test
             Assert.AreEqual("baz", barReimbursements[0].Payee.Name);
         }
 
+        /// <summary>
+        /// Tests that the Trip can calculate reimbursements when
+        /// multiple people paid equal, maximum shares of expenses
+        /// </summary>
         [Test]
         public void TravelerCanGetReimbursementsForMultipleMaxPayer()
         {
+            // add a 4th person to the trip who paid as much as david
             var trip = GenerateBasicTrip();
             trip.AddTraveler("qux");
             trip.AddExpense("qux", 113.41);
             var map = trip.GetMapTravelersToReimbursements();
 
+            // verify that for foo and bar, the output generated
+            // shows they should each pay both baz and qux for reimbursement
             Assert.AreEqual(2, map.Count);
             Assert.IsTrue(map.ContainsKey(trip.GetTraveler("foo")));
             Assert.IsTrue(map.ContainsKey(trip.GetTraveler("bar")));
@@ -136,6 +180,11 @@ namespace TripCalculator.Test
             Assert.AreEqual("qux", barReimbursements[1].Payee.Name);
         }
 
+        /// <summary>
+        /// Helper - just generates a basic trip using the information
+        /// from the specification document as a baseline.
+        /// </summary>
+        /// <returns></returns>
         private Trip GenerateBasicTrip()
         {
             var trip = new Trip();

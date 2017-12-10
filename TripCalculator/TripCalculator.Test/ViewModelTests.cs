@@ -12,6 +12,9 @@ namespace TripCalculator.Test
     [TestFixture]
     public class ViewModelTests
     {
+        /// <summary>
+        /// Tests viewmodel initialization
+        /// </summary>
         [Test]
         public void MainViewModelCanInitialize()
         {
@@ -20,6 +23,9 @@ namespace TripCalculator.Test
             Assert.IsNull(vm.CurrentTrip);
         }
 
+        /// <summary>
+        /// Tests that the mainviewmodel can start a new trip
+        /// </summary>
         [Test]
         public void MainViewModelVerifyStartNewTripCommand()
         {
@@ -32,6 +38,11 @@ namespace TripCalculator.Test
             Assert.IsEmpty(vm.CurrentTrip.Travelers);
         }
 
+        /// <summary>
+        /// Tests all the logic the mainviewmodel has when cycling 
+        /// between TabViews, including generating output when showing the
+        /// output tab
+        /// </summary>
         [Test]
         public void MainViewModelVerifyModifyTabViewCommand()
         {
@@ -88,6 +99,10 @@ namespace TripCalculator.Test
             Assert.IsEmpty(vm.OutputPaymentsList);
         }
 
+        /// <summary>
+        /// Tests the mainviewmodel can add expenses to a traveler
+        /// and that it verifies different inputs before doing so
+        /// </summary>
         [Test]
         public void MainViewModelVerifyAddExpenseCommand()
         {
