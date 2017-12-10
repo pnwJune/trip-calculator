@@ -80,8 +80,6 @@ namespace TripCalculator.ViewModels
             }
         }
 
-        public ObservableCollection<string> OutputPaymentsList { get; set; }
-
         private int _CurrentTabViewIndex;
         public int CurrentTabViewIndex
         {
@@ -109,6 +107,8 @@ namespace TripCalculator.ViewModels
                 NotifyPropertyChanged("CurrentTrip");
             }
         }
+
+        public ObservableCollection<string> OutputPaymentsList { get; set; }
 
         private Command _loadExistingTripCommand;
         public Command LoadExistingTripCommand
@@ -153,6 +153,12 @@ namespace TripCalculator.ViewModels
             CurrentTabViewIndex = (int)TabViews.ModeSelect;
         }
 
+        /// <summary>
+        /// Checks that the expense and traveler to add the expense
+        /// are valid for command execution
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         private bool VerifyExpenseToAddIsValidDouble(object arg)
         {
             double value = 0.0;
@@ -165,12 +171,14 @@ namespace TripCalculator.ViewModels
             return true;
         }
 
-        private void DoAddExpenseCommand(object obj)
-        {
-            CurrentTrip.AddExpense(TravelerToAddExpense, 
-                double.Parse(ExpenseValueToAdd));
-        }
-
+        /// <summary>
+        /// Checks that the parameter is valid string and that
+        /// the current tab view allows for either incrementing
+        /// or decrementing to a new view
+        /// </summary>
+        /// <param name="arg">should be a string to represent increment
+        /// or decrementing the tabView index</param>
+        /// <returns></returns>
         private bool VerifyParameterIsValidModifierAndCanModifyTabViewIndex(object arg)
         {
             if (CurrentTabViewIndex < (int)TabViews.InitializeNewTripView || 
@@ -189,6 +197,10 @@ namespace TripCalculator.ViewModels
                 CurrentTabViewIndex > (int)TabViews.InitializeNewTripView;
         }
 
+        /// <summary>
+        /// Creates a new trip and sets the CurrentTrip to this newly initialized trip
+        /// </summary>
+        /// <param name="obj"></param>
         private void DoStartNewTripCommand(object obj)
         {
             CurrentTrip = new Trip();
@@ -197,6 +209,11 @@ namespace TripCalculator.ViewModels
             ModifyTabViewIndexCommand.RaiseCanExecuteChanged();
         }
 
+        /// <summary>
+        /// Executes either incrementing or decrementing the current selected
+        /// tab view index
+        /// </summary>
+        /// <param name="obj"></param>
         private void DoModifyTabViewIndex(object obj)
         {
             switch(obj.ToString())
@@ -216,6 +233,21 @@ namespace TripCalculator.ViewModels
                 GenerateOutputStrings();
         }
 
+        /// <summary>
+        /// Adds an expense to the current trip
+        /// </summary>
+        /// <param name="obj"></param>
+        private void DoAddExpenseCommand(object obj)
+        {
+            CurrentTrip.AddExpense(TravelerToAddExpense,
+                double.Parse(ExpenseValueToAdd));
+        }
+
+        /// <summary>
+        /// Populates the viewmodel with the string output of
+        /// every person's reimbursement to the maximum payer(s) on
+        /// the current trip
+        /// </summary>
         private void GenerateOutputStrings()
         {
             OutputPaymentsList.Clear();
@@ -238,6 +270,10 @@ namespace TripCalculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// TODO: implement this for the load existing trip command
+        /// </summary>
+        /// <param name="obj"></param>
         private void DoLoadExistingTripCommand(object obj)
         {
             throw new NotImplementedException();
