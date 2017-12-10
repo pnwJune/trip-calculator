@@ -20,7 +20,7 @@
         <Button VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2" Width="200" Command="{Binding LoadExistingTripCommand}" IsEnabled="False">Load Existing Trip (t.b.d)</Button>
     </Grid>
         </TabItem>
-        <TabItem Visibility="Visible" Header="Initialize New Trip">
+        <TabItem Visibility="Collapsed" Header="Initialize New Trip">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition />
@@ -45,7 +45,7 @@
                         HorizontalAlignment="Right" Command="{Binding ModifyTabViewIndexCommand}" CommandParameter="incr">Create Trip</Button>
             </Grid>
         </TabItem>
-        <TabItem Visibility="Visible" Header="Trip">
+        <TabItem Visibility="Collapsed" Header="Trip">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition />
@@ -82,7 +82,7 @@
 
             </Grid>
         </TabItem>
-        <TabItem Header="Final Trip Breakdown">
+        <TabItem Visibility="Collapsed" Header="Final Trip Breakdown">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
