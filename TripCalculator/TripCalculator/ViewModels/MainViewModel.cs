@@ -243,6 +243,11 @@ namespace TripCalculator.ViewModels
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// TODO: implement this for the load existing trip command
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         private bool VerifyParameterIsValidPath(object arg)
         {
             return true;
