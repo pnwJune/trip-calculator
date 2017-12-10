@@ -5,7 +5,7 @@ A sample C# .NET project for iTrellis. Calculates shares of total trip expenses 
 1. Open the solution in Visual Studio
 2. If first time opening the solution, Perform a NuGet Package Restore 
 
-...*(Right click on Solution in solution explorer and select __Restore NuGet Packages__)*
+...Right click on Solution in solution explorer and select __Restore NuGet Packages__
 
 3. Click Start to begin debugging (or hit F5).
 
@@ -13,15 +13,15 @@ A sample C# .NET project for iTrellis. Calculates shares of total trip expenses 
 1. Open the solution in Visual Studio
 2. 2. If first time opening the solution, Perform a NuGet Package Restore 
 
-...*(Right click on Solution in solution explorer and select __Restore NuGet Packages__)*
+...Right click on Solution in solution explorer and select __Restore NuGet Packages__
 
 3. Open Test Explorer in Visual Studio
 
-...*(Go to the top toolbar in VS and select Test > Windows > Test Explorer)*
+...Go to the top toolbar in VS and select Test > Windows > Test Explorer
 
 4. Build the solution
 
-...*(Go to the top toolbar in VS and select Build > Build Solution, or hit F6 on the keyboard)*
+...Go to the top toolbar in VS and select Build > Build Solution, or hit F6 on the keyboard
 
 5. Select Run All in the test explorer pane in the visual studio.
 
