@@ -27,6 +27,12 @@ A sample C# .NET project for iTrellis. Calculates shares of total trip expenses 
 
 ## Project Details - 12/10/2017
 
+For this project, I used the **"Trip Calculator"** domain and the **"Native GUI"** interface. I used Unity and MVVM to create a loosely-coupled UI to make ease of unit-testing the viewmodel for the main window dialog. 
+
+I think I have room for a lot of improvement in the application, specifically in the UI design (it's a bit clunky to add lots of expenses) and in the functionality (I would love to add saving/loading, for example).
+
+I completed the project to this state in about 6 hours, which I believe showcases my proficiency with MVVM and application development using Visual Studio and C#, as well as my familiarity with test-driven development, since all the core functions of the data models and viewmodels have corresponding unit tests which verify their behavior.
+
 Here are the release notes for the current version 1.0.0 for 12/10/2017:
 
 * CALC-1: users should be able to create a trip with travelers
